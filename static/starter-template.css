@@ -1,0 +1,66 @@
+body {
+	padding-top: 50px;
+}
+
+.starter-template > h1 {
+	/* padding: 40px 15px; */
+
+	text-align: center;
+	margin-top: 6.5em;
+}
+
+.Button-container {
+	text-align: center;
+	padding-top: 3em;
+	width: 43%;
+	margin: auto;
+	/* margin-left: 20.5vw; */
+	display: flex;
+	flex-direction: row;
+}
+
+ul > ul {
+	padding: 1em 2em 1em 2em;
+	border: 3px black;
+	border-radius: 25px;
+	-webkit-border-radius: 25px;
+	-moz-border-radius: 25px;
+	-ms-border-radius: 25px;
+	-o-border-radius: 25px;
+	font-size: 2em;
+	transition: 0.5s;
+	-webkit-transition: 0.5s;
+	-moz-transition: 0.5s;
+	-ms-transition: 0.5s;
+	-o-transition: 0.5s;
+}
+
+
+ul > ul:hover {
+	padding: 1.1em 2.2em 1.1em 2.2em;
+	border: 3px black;
+	background-color: rgb(88, 141, 255);
+	transition: 0.5s;
+	border-radius: 25px;
+	-webkit-border-radius: 25px;
+	-moz-border-radius: 25px;
+	-ms-border-radius: 25px;
+	-o-border-radius: 25px;
+	font-size: 2em;
+	-webkit-transition: 0.5s;
+	-moz-transition: 0.5s;
+	-ms-transition: 0.5s;
+	-o-transition: 0.5s;
+}
+
+ul > ul > a {
+	color: black;
+	text-decoration: none;
+	transition: 0.5s;
+}
+
+ul > ul > a:hover {
+	color: rgb(255, 255, 255);
+	text-decoration: none;
+	transition: 0.5s
+}

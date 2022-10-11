@@ -1,0 +1,464 @@
+{% extends "bootstrap/base.html" %} {% block title %} Dashboard {% endblock %}
+{% block styles %} {{super()}}
+<link
+	rel="stylesheet"
+	href="{{url_for('.static', filename='dashboard.css')}}"
+/>
+
+<link rel="stylesheet" href="{{url_for('.static', filename='modal.css')}}" />
+
+{% endblock %} {% block content %}
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button
+				type="button"
+				class="navbar-toggle collapsed"
+				data-toggle="collapse"
+				data-target="#navbar"
+				aria-expanded="false"
+				aria-controls="navbar"
+			>
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">Trade Journal</a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#">Dashboard</a></li>
+				<li><a href="#">Settings</a></li>
+				<li><a href="#">Profile</a></li>
+				<li><a href="{{ url_for('logout') }}">Log Out</a></li>
+			</ul>
+			<form class="navbar-form navbar-right">
+				<input type="text" class="form-control" placeholder="Search..." />
+			</form>
+		</div>
+	</div>
+</nav>
+<h1 class="page-header">Welcome, {{ name }}</h1>
+
+<!-- Trigger/Open The Modal -->
+<button
+	id="myBtn"
+	style="
+		padding: 1em 2em 1em 2em;
+		border-radius: 12px;
+		border: none;
+		background-color: bisque;
+		font-weight: 600;
+		margin: 1em 4em 2em 2em;
+	"
+>
+	Add trade
+</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+	<!-- Modal content -->
+	<div class="modal-content">
+		<span class="close">&times;</span>
+		<div>
+			<h2 style="text-align: center">Add Trades here</h1>
+			<form action="/dashboard" method="POST">
+				<p>Enter Trade Type</p>
+
+				<input
+					type="radio"
+					id="buy"
+					name="trade_type"
+					value="Buy"
+					checked
+					onclick="tradetype(0), ClearFields()"
+				/>
+				  <label for="buy">Buy</label>
+
+				<input
+					type="radio"
+					id="sell"
+					name="trade_type"
+					value="Sell"
+					onclick="tradetype(1), ClearFields()"
+				/>
+				  <label for="sell">Sell</label>
+
+				<p>Please select your Trade Instrument:</p>
+				 
+				<input
+					type="radio"
+					id="equity"
+					name="trade_instrument"
+					value="Equity"
+					checked
+					onclick="text(0), ClearFields()"
+				/>
+				  <label for="equity">Equity</label>  
+				<input
+					type="radio"
+					id="futures"
+					name="trade_instrument"
+					value="Futures"
+					onclick="text(1), ClearFields()"
+				/>
+				  <label for="futures">Futures</label>  
+				<input
+					type="radio"
+					id="call"
+					name="trade_instrument"
+					value="Call"
+					onclick="text(2), ClearFields()"
+				/>
+				 
+				<label for="call">Call</label>
+
+				 
+				<input
+					type="radio"
+					id="put"
+					name="trade_instrument"
+					value="Put"
+					onclick="text(3), ClearFields()"
+				/>
+				 
+				<label for="put">Put</label>
+
+				 
+				<br />
+				<br />
+
+				
+					
+						<label for="stockname">Security Name</label>
+						<input
+							type="text"
+							placeholder="stockname"
+							name="stockname"
+							id="stockname"
+							style="margin-bottom: 1em"
+						/>
+						
+						<label for="quantity" style="padding-left: 2em">Quantity</label>
+						<input
+							type="text"
+							name="quantity"
+							placeholder="quantity"
+							onkeyup="profitcalcBuyandSell()"
+							id="quantity"
+						/>
+					
+					
+	
+					
+					
+					<div id="can" >
+						
+					
+						<label for="lotsize">Lot Size</label>
+						<input
+							type="number"
+							name="lotsize"
+							placeholder="Lot size"
+							id="lotsize"
+							onkeyup="quantityCalc(), profitcalcBuyandSell()"
+						/>
+	
+						
+						<label for="nolot" style="padding-left: 2em">No. of Lot</label>
+						<input
+							type="number"
+							name="nolot"
+							placeholder="No of Lot"
+							id="nolot"
+							onkeyup="quantityCalc(), profitcalcBuyandSell()"
+						/>
+					
+					</div>
+				
+				
+				
+
+				
+
+				<br />
+
+				<div id="canbuy">
+					<h2>Buy Details</h2>
+					<label for="buydate">Buy Date</label>
+					<input
+						type="date"
+						name="buydate"
+						id="buydate"
+						placeholder="buydate"
+					/>
+
+					<label for="buysprice" style="padding-left: 13.5em">Buy Price</label>
+					<input
+						type="number"
+						name="buyprice"
+						placeholder="buyprice"
+						onkeyup="profitcalcBuyandSell()"
+						id="buyprice"
+					/>
+					<br>
+					<br>
+
+					<input
+						type="checkbox"
+						id="openBuyfirst"
+						name="openBuy"
+						value="OPENBUY"
+					/>
+					
+					<input
+						type="checkbox"
+						id="openBuyfirst_defaultcheck"
+						name="openBuyfirst_defaultcheck"
+						checked
+						value="OPENBUY_no"
+						style="display: none"
+					/>
+					
+					<label for="openBuy"> Save as an Open Trade</label>
+					<br />
+
+					<div id="canBuyOpen">
+						<h2>Sell Details</h2>
+						<label for="selldate">Sell Date</label>
+						<input
+							type="date"
+							name="selldate"
+							id="selldate"
+							placeholder="selldate"
+						/>
+
+						<label for="sellprice" style="padding-left: 13.5em"
+							>Sell Price</label
+						>
+						<input
+							type="number"
+							name="sellprice"
+							placeholder="sellprice"
+							id="sellprice"
+							onkeyup="profitcalcBuyandSell()"
+						/>
+					</div>
+				</div>
+
+				<div id="cansell">
+					<h2>Sell Details</h2>
+					<label for="selldate2">Sell Date</label>
+					<input
+						type="date"
+						name="selldate2"
+						id="selldate2"
+						placeholder="selldate"
+					/>
+
+					<label for="sellprice2" style="padding-left: 13.5em"
+						>Sell Price</label
+					>
+					<input
+						type="number"
+						name="sellprice2"
+						placeholder="sellprice"
+						onkeyup="profitcalcBuyandSell()"
+						id="sellprice2"
+					/>
+					<br />
+
+					<input
+						type="checkbox"
+						id="openSell"
+						name="openSell"
+						value="OPENSELL"
+					/>
+					<input
+						type="checkbox"
+						id="openSELLfirst_defaultcheck"
+						name="openSELLfirst_defaultcheck"
+						checked
+						value="OPENSELL_no"
+						style="display: none"
+					/>
+					<label for="openSell"> Save as an Open Trade</label>
+					<br />
+
+					<div id="canSellOpen">
+						<h2>Buy Details</h2>
+						<label for="buydate2">Buy Date</label>
+						<input
+							type="date"
+							name="buydate2"
+							id="buydate2"
+							placeholder="buydate"
+						/>
+
+						<label for="buysprice2" style="padding-left: 13.25em"
+							>Buy Price</label
+						>
+						<input
+							type="number"
+							name="buyprice2"
+							placeholder="buyprice"
+							id="buyprice2"
+							onkeyup="profitcalcBuyandSell()"
+						/>
+					</div>
+				</div>
+
+				<br />
+				
+				
+
+				<div id="paisa">
+					<label for="profit">Profit Net</label>
+					<input type="number" name="profit" placeholder="profit" id="profit" />
+
+					<label for="profitpercent" style="padding-left: 4.2em">Profit %</label>
+					<input
+						type="number"
+						name="profitpercent"
+						placeholder="profit%"
+						id="profitpercent"
+					/>
+				</div>
+
+				<input type="submit" value="Add Trade" style="margin-top: 2em" />
+			</form>
+		</div>
+	</div>
+</div>
+
+<script src="{{url_for('static', filename='modal.js')}}"></script>
+
+<!-- 
+<div>
+	<h1>Hello World</h1>
+</div> -->
+
+<div class="content" style="margin: 0em 2em 2em 2em">
+	{% if tasks|length < 1 %}
+	<h4 style="text-align: center">
+		There are no Trades available, Create one Below!
+	</h4>
+	{% else %}
+
+	<h3 style="font-weight: 600; margin: 1em 2em 1em 0.25em">CLOSED TRADES</h3>
+	<table class="table">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">Trade Type</th>
+				<th scope="col">Trade State</th>
+				<th scope="col">Trade Instrument</th>
+				<th scope="col">Buy Date</th>
+				<th scope="col">Sell Date</th>
+				<th scope="col">buyprice</th>
+				<th scope="col">sellprice</th>
+				<th scope="col">quantity</th>
+				<th scope="col">Lot Size</th>
+				<th scope="col">No of Lot</th>
+				<th scope="col">security name</th>
+				<!-- <th scope="col">Time created</th> -->
+				<th scope="col">Profit Net</th>
+				<th scope="col">Profit Percentage</th>
+				<th scope="col">Actions</th>
+			</tr>
+		</thead>
+		{% for task in tasks %} {% if task.userid == user_for_pass%} {% if
+		task.trade_state == "CLOSED" %}
+
+		<tr>
+			<td>{{ task.trade_type }}</td>
+			<td>{{ task.trade_state }}</td>
+			<td>{{ task.instrument }}</td>
+			<td>{{ task.buy_date }}</td>
+			<td>{{ task.sell_date }}</td>
+			<td>{{ task.buyprice }}</td>
+			<td>{{ task.sellprice }}</td>
+			<td>{{ task.quantity }}</td>
+			<td>{{ task.lot_size }}</td>
+			<td>{{ task.no_of_lot }}</td>
+			<td>{{ task.securityname }}</td>
+			<!-- <td>{{ task.date_created }}</td> -->
+			<td>{{ task.profit }}</td>
+			<td>{{ task.profit_percent }}</td>
+
+			<td>
+				<button
+					href="/update/{{task.sno}}"
+					type="button"
+					class="btn btn-outline-dark btn-sm mx-1"
+				>
+					<a target="_blank" href="/update/{{task.sno}}"> Update </a>
+				</button>
+			</td>
+		</tr>
+		{% endif %} {% endif %} {% endfor %}
+	</table>
+
+	<h3 style="font-weight: 600; margin: 2em 2em 1em 0.25em">OPEN TRADES</h3>
+	<table class="table">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">Trade Type</th>
+				<th scope="col">Trade State</th>
+				<th scope="col">Trade Instrument</th>
+				<th scope="col">Buy Date</th>
+				<th scope="col">Sell Date</th>
+				<th scope="col">buyprice</th>
+				<th scope="col">sellprice</th>
+				<th scope="col">quantity</th>
+				<th scope="col">Lot Size</th>
+				<th scope="col">No of Lot</th>
+				<th scope="col">security name</th>
+				<!-- <th scope="col">Time created</th> -->
+				<th scope="col">Profit Net</th>
+				<th scope="col">Profit Percentage</th>
+				<th scope="col">Actions</th>
+			</tr>
+		</thead>
+		{% for task in tasks %} {% if task.userid == user_for_pass%} {% if
+		task.trade_state == "OPEN" %}
+
+		<tr>
+			<td>{{ task.trade_type }}</td>
+			<td>{{ task.trade_state }}</td>
+			<td>{{ task.instrument }}</td>
+			<td>{{ task.buy_date }}</td>
+			<td>{{ task.sell_date }}</td>
+			<td>{{ task.buyprice }}</td>
+			<td>{{ task.sellprice }}</td>
+			<td>{{ task.quantity }}</td>
+			<td>{{ task.lot_size }}</td>
+			<td>{{ task.no_of_lot }}</td>
+			<td>{{ task.securityname }}</td>
+			<!-- <td>{{ task.date_created }}</td> -->
+			<td>{{ task.profit }}</td>
+			<td>{{ task.profit_percent }}</td>
+			<td>
+				<button
+					href="/update/{{task.sno}}"
+					type="button"
+					class="btn btn-outline-dark btn-sm mx-1"
+				>
+					<a target="_blank" href="/update/{{task.sno}}"> Update </a>
+				</button>
+			</td>
+
+			<!-- <td>
+				<a href="/delete/{{task.id}}">Delete</a>
+				<br />
+				<a href="/update/{{task.id}}">Update</a>
+			</td> -->
+		</tr>
+		{% endif %} {% endif %} {% endfor %}
+	</table>
+	{% endif %}
+</div>
+
+
+
+{% endblock %}

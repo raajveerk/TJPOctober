@@ -1,0 +1,388 @@
+{% extends "bootstrap/base.html" %} {% block title %} Update {% endblock %} {%
+block styles %} {{super()}}
+<link
+	rel="stylesheet"
+	href="{{url_for('.static', filename='dashboard.css')}}"
+/>
+
+<link rel="stylesheet" href="{{url_for('.static', filename='update.css')}}" />
+
+{% endblock %} {% block content %}
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button
+				type="button"
+				class="navbar-toggle collapsed"
+				data-toggle="collapse"
+				data-target="#navbar"
+				aria-expanded="false"
+				aria-controls="navbar"
+			>
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">Trade Journal</a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="#">Dashboard</a></li>
+				<li><a href="#">Settings</a></li>
+				<li><a href="#">Profile</a></li>
+				<li><a href="{{ url_for('logout') }}">Log Out</a></li>
+			</ul>
+			<form class="navbar-form navbar-right">
+				<input type="text" class="form-control" placeholder="Search..." />
+			</form>
+		</div>
+	</div>
+</nav>
+
+<!-- Trigger/Open The Modal -->
+<button id="myBtn">Update trade</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+	<!-- Modal content -->
+	<div class="modal-content">
+		<span class="close">&times;</span>
+		<div>
+			<h1 style="text-align: center">Add Trades here</h1>
+			<form action="/update/{{Task.sno}}" method="POST">
+				<p>Enter Trade Type</p>
+				{% if Task.trade_type == "Buy" %}
+				<input
+					type="radio"
+					id="buy"
+					name="trade_type"
+					value="Buy"
+					checked
+					onclick="tradetype(0)"
+				/>
+				  <label for="buy">Buy</label>
+				{% else %}
+				<input
+					type="radio"
+					id="buy"
+					name="trade_type"
+					value="Buy"
+					onclick="tradetype(0)"
+				/>
+				  <label for="buy">Buy</label>
+				{% endif %}
+
+				
+				{% if Task.trade_type == "Sell" %}
+				<input
+					type="radio"
+					id="sell"
+					name="trade_type"
+					value="Sell"
+					checked
+					onclick="tradetype(1)"
+				/>
+				  <label for="sell">Sell</label>
+					
+				{% else %}
+				<input
+				type="radio"
+				id="sell"
+				name="trade_type"
+				value="Sell"
+				onclick="tradetype(1)"/>
+  				<label for="sell">Sell</label>
+				{% endif %}
+				
+
+				<p>Please select your Trade Instrument:</p>
+				 
+
+				{% if Task.instrument == "Equity" %}
+				<input
+				type="radio"
+				id="equity"
+				name="trade_instrument"
+				value="Equity"
+				checked
+				onclick="text(0)"
+				/>
+  				<label for="equity">Equity</label>  
+				{% else %}
+				<input
+					type="radio"
+					id="equity"
+					name="trade_instrument"
+					value="Equity"
+					onclick="text(0)"
+				/>
+				  <label for="equity">Equity</label>  	
+				{% endif %}
+				
+				{% if Task.instrument == "Futures" %}
+				<input
+				type="radio"
+				id="futures"
+				name="trade_instrument"
+				value="Futures"
+				checked
+				onclick="text(1)"
+			/>
+			  	<label for="futures">Futures</label>  
+				{% else %}
+				<input
+				type="radio"
+				id="futures"
+				name="trade_instrument"
+				value="Futures"
+				onclick="text(1)"
+			/>
+			  <label for="futures">Futures</label>  
+				{% endif %}
+				
+				{% if Task.instrument == "Call" %}
+				<input
+					type="radio"
+					id="call"
+					name="trade_instrument"
+					value="Call"
+					checked
+					onclick="text(2)"
+				/>
+				 
+				<label for="call">Call</label>	
+				{% else %}
+					<input
+					type="radio"
+					id="call"
+					name="trade_instrument"
+					value="Call"
+					onclick="text(2)"
+				/>
+				 
+				<label for="call">Call</label>
+				{% endif %}
+				
+				{% if Task.instrument == "Put" %}
+				<input
+				type="radio"
+				id="put"
+				name="trade_instrument"
+				value="Put"
+				checked
+				onclick="text(3)"
+				style="padding-left: 0.2em;"
+			/>
+			 
+			<label for="put">Put</label>
+				{% else %}
+				<input
+				type="radio"
+				id="put"
+				name="trade_instrument"
+				value="Put"
+				onclick="text(3)"
+				style="padding-left: 0.2em;"
+			/>
+			 
+			<label for="put">Put</label>
+				{% endif %}
+				
+
+				 
+				<br />
+				<br />
+
+				<label for="stockname">Security Name</label>
+				<input
+					type="text"
+					placeholder="stockname"
+					name="stockname"
+					id="stockname"
+					value="{{Task.securityname}}"
+				/>
+				<label for="quantity" style="padding-left: 2em;">Quantity</label>
+				<input
+					type="text"
+					name="quantity"
+					placeholder="quantity"
+					value="{{Task.quantity}}"
+					onkeyup="profitcalcBuyandSell()"
+					id="quantity"
+				/>
+
+				<div id="can">
+					<label for="lotsize">Lot Size</label>
+					<input
+						type="number"
+						name="lotsize"
+						placeholder="Lot size"
+						id="lotsize"
+						value="{{Task.lot_size}}"
+						onkeyup="quantityCalc(), profitcalcBuyandSell()"
+					/>
+
+					<label for="nolot" style="padding-left: 2em;">No. of Lot</label>
+					<input
+						type="number"
+						name="nolot"
+						placeholder="No of Lot"
+						id="nolot"
+						value="{{Task.no_of_lot}}"
+						onkeyup="quantityCalc(), profitcalcBuyandSell()"
+					/>
+				</div>
+
+				<div id="canbuy">
+					<h2>Buy Details</h2>
+					<label for="buydate">Buy Date</label>
+					<input
+						type="date"
+						name="buydate"
+						id="buydate"
+						value="{{ buydate }}"
+						placeholder="buydate"
+					/>
+					<label for="buyprice" style="padding-left: 12em;">Buy Price</label>
+					<input
+						type="number"
+						name="buyprice"
+						placeholder="buyprice"
+						value="{{ Task.buyprice }}"
+						id="buyprice"
+						onkeyup="profitcalcBuyandSell()"
+					/>
+					<br />
+
+					<input
+						type="checkbox"
+						id="openBuyfirst"
+						name="openBuy"
+						value="OPENBUY"
+						style="padding-top: 2.5em;"
+					/>
+					<input
+						type="checkbox"
+						id="openBuyfirst_defaultcheck"
+						name="openBuyfirst_defaultcheck"
+						checked
+						value="OPENBUY_no"
+						style="display: none; padding-top: 2.5em;"
+					/>
+					<label for="openBuy" style="padding-left: 0.4em;"> Save as an Open Trade</label>
+					<br />
+
+					<div id="canBuyOpen">
+						<h2>Sell Details</h2>
+						<label for="selldate">Sell Date</label>
+						<input
+							type="date"
+							name="selldate"
+							id="selldate"
+							value="{{ selldate }}"
+							placeholder="selldate"
+						/>
+						<label for="sellprice" style="padding-left: 12em;">Sell Price</label>
+						<input
+							type="number"
+							name="sellprice"
+							placeholder="sellprice"
+							id="sellprice"
+							value="{{ Task.sellprice }}"
+							onkeyup="profitcalcBuyandSell();"
+						/>
+					</div>
+				</div>
+
+				<div id="cansell">
+					<h2>Sell Details</h2>
+					<label for="selldate2">Sell Date</label>
+					<input
+						type="date"
+						name="selldate2"
+						id="selldate2"
+						value="{{ selldate }}"
+						placeholder="selldate"
+					/>
+					<label for="sellprice2" style="padding-left: 8.9em;">Sell Price</label>
+					<input
+						type="number"
+						name="sellprice2"
+						placeholder="sellprice"
+						value="{{ Task.sellprice }}"
+						onkeyup="profitcalcBuyandSell()"
+						id="sellprice2"
+					/>
+					<br />
+
+					<input
+						type="checkbox"
+						id="openSell"
+						name="openSell"
+						value="OPENSELL"
+						style="margin-top: 1.2em; margin-bottom: 1.5em;"
+					/>
+					<input
+						type="checkbox"
+						id="openSELLfirst_defaultcheck"
+						name="openSELLfirst_defaultcheck"
+						checked
+						value="OPENSELL_no"
+						style="display: none"
+					/>
+					<label for="openSell" style="padding-top: 1.5em;"> Save as an Open Trade</label>
+					<br />
+
+					<div id="canSellOpen">
+						<h2>Buy Details</h2>
+						<label for="buydate2">Buy Date</label>
+						<input
+							type="date"
+							name="buydate2"
+							id="buydate2"
+							value="{{ buydate }}"
+							placeholder="buydate"
+						/>
+						<label for="buysprice2" style="padding-left: 8.9em;">Buy Price</label>
+						<input
+							type="number"
+							name="buyprice2"
+							placeholder="buyprice"
+							id="buyprice2"
+							value="{{Task.buyprice}}"
+							onkeyup="profitcalcBuyandSell()"
+						/>
+					</div>
+				</div>
+
+				<br />
+
+				<div id="paisa">
+					<label for="profit">Profit Net</label>
+					<input type="number" name="profit" placeholder="profit" id="profit" value="{{ Task.profit }}" />
+
+					<label for="profitpercent" style="padding-left: 4.5em;">Profit %</label>
+					<input
+						type="number"
+						name="profitpercent"
+						placeholder="profit%"
+						id="profitpercent"
+						value="{{ Task.profit_percent }}"
+					/>
+				</div>
+
+				<input type="submit" value="Add Trade" style="margin-top: 2em;"/>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script src="{{url_for('static', filename='update.js')}}"></script>
+
+<!-- 
+<div>
+	<h1>Hello World</h1>
+</div> -->
+
+{% endblock %}
