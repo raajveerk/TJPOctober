@@ -69,7 +69,7 @@ class UserTable(UserMixin, db.Model):
     cityto = db.Column(db.String(50), nullable=False)
     state = db.Column(db.String(30), nullable=False)
     address = db.Column(db.String(150), nullable=True)
-    phonenumber = db.Column(db.String(13), nullable=True, unique=True)
+    phonenumber = db.Column(db.String(13), nullable=False, unique=True)
     zipcode = db.Column(db.String(6), nullable=False, unique=False)
     userid = db.Column(db.String(8), nullable=False, unique=True)
 
