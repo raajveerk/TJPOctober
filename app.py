@@ -69,7 +69,7 @@ class UserTable(UserMixin, db.Model):
     cityto = db.Column(db.String(50), nullable=False)
     state = db.Column(db.String(30), nullable=False)
     address = db.Column(db.String(150), nullable=True)
-    phonenumber = db.Column(db.String(13), nullable=False, unique=True)
+    phonenumber = db.Column(db.String(13), nullable=False, unique=False)
     zipcode = db.Column(db.String(6), nullable=False, unique=False)
     userid = db.Column(db.String(8), nullable=False, unique=True)
 
@@ -160,7 +160,7 @@ class RegistrationForm(FlaskForm):
     address = StringField('Address', validators=[Length(min=0, max=150)])
     state = StringField('State *', validators=[
                         InputRequired(), Length(min=3, max=35)])
-    phonenumber = StringField('Phone Number', validators=[
+    phonenumber = StringField('Phone Number *', validators=[
                               Length(min=10, max=12)])
 
 
