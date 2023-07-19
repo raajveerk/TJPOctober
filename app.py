@@ -20,16 +20,19 @@ from wtforms.validators import InputRequired, Email, Length
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LOGIN_MESSAGE, LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 
+
 # -----MISC-----
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'tradeJournalProject2022'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tjp.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tjp.db'
 
-app.config['SQLALCHEMY_BINDS'] = {
-    'tjpdata': 'sqlite:///tjpdata.db', 'tjp': 'sqlite:///tjp.db'}
+app.config['SQLALCHEMY_BINDS'] = {'tjpdata': 'sqlite:///tjpdata.db', 'tjp': 'sqlite:///tjp.db'}
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    
 Bootstrap(app)
-db = SQLAlchemy(app)
+db = SQLAlchemy()
+db.init_app(app)
 login_manager = LoginManager(app)
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -69,7 +72,7 @@ class UserTable(UserMixin, db.Model):
     cityto = db.Column(db.String(50), nullable=False)
     state = db.Column(db.String(30), nullable=False)
     address = db.Column(db.String(150), nullable=True)
-    phonenumber = db.Column(db.String(13), nullable=False, unique=False)
+    phonenumber = db.Column(db.String(13), nullable=True, unique=True)
     zipcode = db.Column(db.String(6), nullable=False, unique=False)
     userid = db.Column(db.String(8), nullable=False, unique=True)
 
@@ -87,7 +90,7 @@ class UserTable(UserMixin, db.Model):
         return UserTable.query.get(user_id)
 
 
-class DataTableCr(db.Model):
+class DataTableCr(db.Model):    
     __bind_key__ = 'tjpdata'
     sno = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.String(8), nullable=False, unique=False)
@@ -111,6 +114,9 @@ class DataTableCr(db.Model):
     def __repr__(self):
         return '<Task %r>' % self.sno
 
+# db.init_app(app)
+# with app.app_context():
+#     db.create_all()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -160,7 +166,7 @@ class RegistrationForm(FlaskForm):
     address = StringField('Address', validators=[Length(min=0, max=150)])
     state = StringField('State *', validators=[
                         InputRequired(), Length(min=3, max=35)])
-    phonenumber = StringField('Phone Number *', validators=[
+    phonenumber = StringField('Phone Number', validators=[
                               Length(min=10, max=12)])
 
 
@@ -658,6 +664,9 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+# db.init_app(app)
+# with app.app_context():
+#     db.create_all()
 
 if __name__ == '__main__':
     app.run(debug=True)
