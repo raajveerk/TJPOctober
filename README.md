@@ -1,4 +1,4 @@
-# TJPApril
+# TJP
 Online Trade Journal
 
 --> Hello all! I'm Raajveer and this is the Trade Journal Project.
