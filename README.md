@@ -2,29 +2,37 @@
 Online Trade Journal
 
 --> Hello all! I'm Raajveer and this is the Trade Journal Project.
-    I've run out of all of the free hosting services and I'm broke so I've included some videos to demonstrate the features of the platform.
+    I've run out of all of the free hosting services so I've included some photos to demonstrate the features of the platform.
     Cheers!
 
 1. The Landing Page:
-https://github.com/raajveerk/TJPOctober/assets/89625270/40dee2e9-a18f-4d26-8da9-2f1ef931e88e
+
+![Landing](https://github.com/user-attachments/assets/48b077c3-3494-4b27-94ca-6f121cb3a3db)
 
 2. Sign-Up Page:
-https://github.com/raajveerk/TJPOctober/assets/89625270/f53f9010-c7d7-40bc-a33e-f206a14e06b4
+
+![SignUp](https://github.com/user-attachments/assets/d26c8a2b-5688-41d3-93ea-f92d93f18a0c)
 
 3. Login Page:
-https://github.com/raajveerk/TJPOctober/assets/89625270/a0fe7801-2401-42b2-a90c-59cc11dd5b4d
+
+![Login](https://github.com/user-attachments/assets/02ad41c8-ee0d-491c-809c-332dd8ee89ab)
 
 4. TradeTicket:
-https://github.com/raajveerk/TJPOctober/assets/89625270/2ea8f422-9f56-4084-b617-a549b6a754e9
+
+![Trade Ticket](https://github.com/user-attachments/assets/1cfef761-551e-4c4a-bce9-7dc27708f0bd)
 
 5. Adding a Closed Trade:
-https://github.com/raajveerk/TJPOctober/assets/89625270/facbc9b7-37eb-4075-b122-c14b866f0fa1
+
+![AddTradeClosed](https://github.com/user-attachments/assets/fd05e640-b5ee-4959-a4b9-c3f2b3ade5c7)
 
 6. Updating a Pre-existing Trade:
-https://github.com/raajveerk/TJPOctober/assets/89625270/d538139a-3b42-4ad1-bc97-6116da1cee0a
+
+![Update](https://github.com/user-attachments/assets/1739adfb-3a94-466f-b4d5-0c93496e02a8)
 
 7. Adding an Open Trade:
-https://github.com/raajveerk/TJPOctober/assets/89625270/56751c31-4f0b-4989-8a1a-973921a30fe7
+
+![AddTradeOpen](https://github.com/user-attachments/assets/2e124b9a-55da-4d54-9e0a-c5dbed6c2543)
 
 8. Logging Out:
-https://github.com/raajveerk/TJPOctober/assets/89625270/50ff5341-9066-4b80-bec3-47725fc4a0ba
+
+![LogOut](https://github.com/user-attachments/assets/2a930cb6-88c6-4d91-ab60-006b08ae0183)
